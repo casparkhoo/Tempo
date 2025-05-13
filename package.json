@@ -1,0 +1,11 @@
+{
+  "name": "study-tracker-app",
+  "version": "1.0.0",
+  "description": "A simple study tracking app using vanilla TypeScript.",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}

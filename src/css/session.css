@@ -1,0 +1,64 @@
+input, textarea, button {
+    font-family: inherit;
+    font-size: 1rem;
+    border-radius: 0.25rem;
+    border: 1px solid #eee;
+    padding: 0.5rem;
+    background: #fafafa;
+    box-sizing: border-box;
+}
+
+button {
+    border: none;
+    background: linear-gradient(to right, #fc4c02, #fc7202);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+button:active {
+    background: #f95e5e;
+}
+
+.timer-display {
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin-bottom: 0.125rem;
+    color: #ffffff;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 6vh;
+}
+
+.timer-controls {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    justify-content: center;
+}
+.timer-controls button {
+    background: #f2f2f2;
+    color: #333;
+    border: none;
+    border-radius: 0.22rem;
+    padding: 0.15rem 0.7rem;
+    font-size: 1.15rem;
+    min-width: 36px;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+.timer-controls button:active {
+    background: #e0e0e0;
+    transform: scale(0.97);
+}
+.timer-controls button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}

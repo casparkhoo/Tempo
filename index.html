@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tempo</title>
+    <link rel="stylesheet" href="src/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+</head>
+<body>
+    <div id="global-timer" class="timer-bar">
+        <div class="timer-display">00:00:00</div>
+        <div class="timer-controls">
+            <button class="start-btn" type="button"><i class="ri-play-large-line"></i></button>
+            <button class="pause-btn" type="button" disabled><i class="ri-pause-line"></i></button>
+            <button class="reset-btn" type="button" disabled><i class="ri-refresh-line"></i></button>
+            <button class="save-btn" type="button" disabled><i class="ri-save-line"></i></button>
+        </div>
+    </div>
+    <main>
+        <section id="home-page" class="app-section">
+            <div class="page-container">
+                <div class="home-session-wrapper">
+                </div>
+            </div>
+        </section>
+
+        <section id="session-page" class="app-section">
+            <div class="page-container">
+            </div>
+        </section>
+
+        <section id="statistics-page" class="app-section">
+            <div class="page-container">
+                <h1>Statistics</h1>
+                <p><!-- TODO: Add statistics/summary section --></p>
+            </div>
+        </section>
+
+        <section id="settings-page" class="app-section">
+            <div class="page-container">
+                <h1>Settings</h1>
+                <p>Adjust your preferences here.</p>
+            </div>
+        </section>
+    </main>
+
+    <nav>
+        <ul>
+            <li>
+                <a href="#home" title="Home">
+                    <i class="ri-home-line"></i>
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="#session" title="Session">
+                    <i class="ri-time-line"></i>
+                    <span>Session</span>
+                </a>
+            </li>
+            <li>
+                <a href="#statistics" title="Statistics">
+                    <i class="ri-bar-chart-box-line"></i>
+                    <span>Statistics</span>
+                </a>
+            </li>
+            <li>
+                <a href="#settings" title="Settings">
+                    <i class="ri-settings-2-line"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <script src="dist/index.js"></script>
+</body>
+</html>
