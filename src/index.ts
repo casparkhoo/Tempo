@@ -32,6 +32,19 @@ class SharedTimer {
     private intervalId: number | null = null;
     private readonly uis: TimerUI[] = [];
 
+    // Fetch saved sessions from storage
+    static loadSavedSessions(): Array<{ seconds: number, timestamp: number }> {
+        const sessionsJson = localStorage.getItem('timerSessions');
+        return sessionsJson ? JSON.parse(sessionsJson) : [];
+    }
+
+    // Save a session to storage
+    static saveSession(seconds: number) {
+        const sessions = SharedTimer.loadSavedSessions();
+        sessions.push({ seconds, timestamp: Date.now() });
+        localStorage.setItem('timerSessions', JSON.stringify(sessions));
+    }
+
     registerUI(container: HTMLElement) {
         const ui: TimerUI = {
             display: container.querySelector('.timer-display')!,
@@ -100,9 +113,43 @@ class SharedTimer {
         this.updateUI();
     }
 
+
     save() {
         this.pause();
-        console.log(`Saved session: ${this.seconds} seconds`);
-        // Store or export the session time here if needed
+        SharedTimer.saveSession(this.seconds);
+        this.seconds = 0;
+        this.updateDisplay();
+        this.updateUI();
+        updateRecentSessionCube(); // <-- Add this line
     }
 }
+
+function formatTime(seconds: number): string {
+    const hh = String(Math.floor(seconds / 3600)).padStart(2, '0');
+    const mm = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+    const ss = String(seconds % 60).padStart(2, '0');
+    return `${hh}:${mm}:${ss}`;
+}
+
+function updateRecentSessionCube() {
+    const sessionsJson = localStorage.getItem('timerSessions');
+    const sessions: Array<{ seconds: number; timestamp: number }> = sessionsJson ? JSON.parse(sessionsJson) : [];
+
+    const homeElem = document.getElementById('recent-session-home');
+    const statsElem = document.getElementById('recent-session-statistics');
+
+    const text = sessions.length === 0
+        ? 'No recent sessions'
+        : formatTime(sessions[sessions.length - 1].seconds);
+
+    if (homeElem) homeElem.textContent = text;
+    if (statsElem) statsElem.textContent = text;
+}
+
+// Update on both statistics and home page navigation
+window.addEventListener('hashchange', function() {
+    if(location.hash === '#statistics' || location.hash === '#home') updateRecentSessionCube();
+});
+window.addEventListener('DOMContentLoaded', function() {
+    if(location.hash === '#statistics' || location.hash === '#home') updateRecentSessionCube();
+});

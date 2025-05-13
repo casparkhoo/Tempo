@@ -1,33 +1,24 @@
-.timer-bar {
-    position: sticky;
-    top: 0;
-    left: 0;
-    width: 100%; /* changed from 100vw */
-    background: #fff;
-    z-index: 100;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.5rem 0.5rem;
-    min-height: 60px;
-}
-/*
-.timer-bar .timer-display {
-    font-size: 2rem;
+.timer-display {
+    font-size: 3.5rem;
     font-weight: bold;
+    margin-bottom: 0.125rem;
     color: #ffffff;
     letter-spacing: 0.05em;
-    min-width: 120px;
-}
-
-.timer-bar .timer-controls {
     display: flex;
-    gap: 0.2rem;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 6vh;
 }
 
-.timer-bar .timer-controls button {
+.timer-controls {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    justify-content: center;
+}
+.timer-controls button {
     background: #f2f2f2;
     color: #333;
     border: none;
@@ -42,11 +33,11 @@
     cursor: pointer;
     transition: background 0.2s, transform 0.1s;
 }
-.timer-bar .timer-controls button:active {
+.timer-controls button:active {
     background: #e0e0e0;
     transform: scale(0.97);
 }
-.timer-bar .timer-controls button:disabled {
+.timer-controls button:disabled {
     opacity: 0.5;
     cursor: default;
-} */
+}

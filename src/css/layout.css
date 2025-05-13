@@ -12,7 +12,7 @@ html, body {
 
 body {
     color: #333333;
-    background: linear-gradient(to right, #fc4c02, #fc9002);
+    background: linear-gradient(to bottom, #fc4c02, #fc7f02);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     line-height: 1.5;
     display: flex;
