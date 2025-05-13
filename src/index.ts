@@ -1,6 +1,6 @@
 function updatePageVisibility() {
     const hash = window.location.hash || '#home';
-    const pages = ['home', 'session', 'statistics', 'settings'];
+    const pages = ['home', 'statistics', 'account']; // updated pages
     pages.forEach(page => {
         const section = document.getElementById(`${page}-page`);
         if (section) {
@@ -89,6 +89,7 @@ class SharedTimer {
         this.seconds++;
         this.updateDisplay();
         this.updateUI();
+        updateRecentSessionCube(this.seconds);
     };
 
     start() {
@@ -111,6 +112,7 @@ class SharedTimer {
         this.seconds = 0;
         this.updateDisplay();
         this.updateUI();
+        updateRecentSessionCube(0); // Add this line
     }
 
 
@@ -120,7 +122,7 @@ class SharedTimer {
         this.seconds = 0;
         this.updateDisplay();
         this.updateUI();
-        updateRecentSessionCube(); // <-- Add this line
+        updateRecentSessionCube(0); // Change to pass 0 here
     }
 }
 
@@ -131,19 +133,101 @@ function formatTime(seconds: number): string {
     return `${hh}:${mm}:${ss}`;
 }
 
-function updateRecentSessionCube() {
+function updateRecentSessionCube(currentSeconds: number = 0) {
     const sessionsJson = localStorage.getItem('timerSessions');
     const sessions: Array<{ seconds: number; timestamp: number }> = sessionsJson ? JSON.parse(sessionsJson) : [];
 
     const homeElem = document.getElementById('recent-session-home');
     const statsElem = document.getElementById('recent-session-statistics');
+    const dailyElem = document.getElementById('daily-total');
+    const weeklyElem = document.getElementById('weekly-total');
+    const monthlyElem = document.getElementById('monthly-total');
+    const yearlyElem = document.getElementById('yearly-total');
+    const avgDailyElem = document.getElementById('average-daily-total'); // NEW
 
-    const text = sessions.length === 0
-        ? 'No recent sessions'
-        : formatTime(sessions[sessions.length - 1].seconds);
+    let text: string;
+    if (currentSeconds > 0) {
+        text = formatTime(currentSeconds);
+    } else if (sessions.length === 0) {
+        text = 'No recent sessions';
+    } else {
+        text = formatTime(sessions[sessions.length - 1].seconds);
+    }
 
     if (homeElem) homeElem.textContent = text;
     if (statsElem) statsElem.textContent = text;
+
+    // Calculate totals
+    const now = new Date();
+    let daily = 0, weekly = 0, monthly = 0, yearly = 0;
+
+    // Get the start of the current week (Monday)
+    const dayOfWeek = now.getDay() === 0 ? 6 : now.getDay() - 1; // Monday=0, Sunday=6
+    const weekStart = new Date(now);
+    weekStart.setHours(0, 0, 0, 0);
+    weekStart.setDate(now.getDate() - dayOfWeek);
+
+    // For average calculation
+    let totalSeconds = 0;
+    let daySet = new Set<string>();
+
+    for (const session of sessions) {
+        const date = new Date(session.timestamp);
+
+        // Daily
+        if (
+            date.getFullYear() === now.getFullYear() &&
+            date.getMonth() === now.getMonth() &&
+            date.getDate() === now.getDate()
+        ) {
+            daily += session.seconds;
+        }
+        // Weekly
+        if (date >= weekStart && date <= now) {
+            weekly += session.seconds;
+        }
+        // Monthly
+        if (
+            date.getFullYear() === now.getFullYear() &&
+            date.getMonth() === now.getMonth()
+        ) {
+            monthly += session.seconds;
+        }
+        // Yearly
+        if (date.getFullYear() === now.getFullYear()) {
+            yearly += session.seconds;
+        }
+
+        // For average: track unique days and sum
+        const dayKey = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+        daySet.add(dayKey);
+        totalSeconds += session.seconds;
+    }
+
+    // Add running session time to totals and today for average
+    if (currentSeconds > 0) {
+        daily += currentSeconds;
+        weekly += currentSeconds;
+        monthly += currentSeconds;
+        yearly += currentSeconds;
+
+        // Add to today for average
+        const todayKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+        daySet.add(todayKey);
+        totalSeconds += currentSeconds;
+    }
+
+    // Calculate average daily total
+    let avg = 0;
+    if (daySet.size > 0) {
+        avg = Math.round(totalSeconds / daySet.size);
+    }
+
+    if (dailyElem) dailyElem.textContent = formatTime(daily);
+    if (weeklyElem) weeklyElem.textContent = formatTime(weekly);
+    if (monthlyElem) monthlyElem.textContent = formatTime(monthly);
+    if (yearlyElem) yearlyElem.textContent = formatTime(yearly);
+    if (avgDailyElem) avgDailyElem.textContent = formatTime(avg);
 }
 
 // Update on both statistics and home page navigation

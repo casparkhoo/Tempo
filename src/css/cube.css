@@ -7,10 +7,10 @@
     margin: 2rem 0;
 }
 .cube {
-    width: 200px;
-    height: 125px;
+    width: 300px;
+    height: 150px;
     background: #fff;
-    border-radius: 1.2rem;
+    border-radius: 0.75rem;
     box-shadow: 0 2px 12px rgba(0,0,0,0.08);
     display: flex;
     flex-direction: column;
@@ -30,8 +30,8 @@
     font-size: 1rem;
     font-weight: 500;
     padding: 0.3rem 0;
-    border-top-left-radius: 1.2rem;
-    border-top-right-radius: 1.2rem;
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
     text-align: center;
     letter-spacing: 0.02em;
     box-sizing: border-box;
