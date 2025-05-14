@@ -7,17 +7,15 @@
     margin: 2rem 0;
 }
 .cube {
-    width: 300px;
-    height: 150px;
-    background: #fff;
+    width: 200px;
+    height: 100px;
     border-radius: 0.75rem;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start; /* changed from center */
-    font-size: 1.5rem;
-    color: #fc4c02;
+    font-size: 2rem;
+    color: grey;
     text-align: center;
     position: relative;
     overflow: hidden; /* ensure banner corners are rounded */
@@ -26,12 +24,10 @@
 .cube-banner {
     width: 100%;
     background: #fc7f02;
-    color: #fff;
+    color: white;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 600;
     padding: 0.3rem 0;
-    border-top-left-radius: 0.75rem;
-    border-top-right-radius: 0.75rem;
     text-align: center;
     letter-spacing: 0.02em;
     box-sizing: border-box;
@@ -51,6 +47,12 @@
     color: #aaa;
     font-weight: 400;
     margin-top: 0.5rem;
+}
+
+.cube:hover {
+    box-shadow: 12px 12px 12px rgba(0,0,0,0.1),
+    -10px -10px 10px white;
+    transition-duration: 0.25s;
 }
 
 @media (max-width: 600px) {

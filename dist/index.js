@@ -1,4 +1,5 @@
 "use strict";
+var _a;
 function updatePageVisibility() {
     const hash = window.location.hash || '#home';
     const pages = ['home', 'statistics', 'account']; // updated pages
@@ -17,6 +18,16 @@ window.addEventListener('DOMContentLoaded', () => {
     const globalTimer = document.getElementById('global-timer');
     if (globalTimer)
         timer.registerUI(globalTimer);
+    const signinBtn = document.getElementById('google-signin-btn');
+    if (signinBtn) {
+        signinBtn.addEventListener('click', () => {
+            window.location.href = getGoogleOAuthURL();
+        });
+    }
+    // Handle callback if on /callback
+    if (window.location.pathname === '/callback') {
+        handleGoogleOAuthCallback();
+    }
 });
 class SharedTimer {
     constructor() {
@@ -206,4 +217,65 @@ window.addEventListener('hashchange', function () {
 window.addEventListener('DOMContentLoaded', function () {
     if (location.hash === '#statistics' || location.hash === '#home')
         updateRecentSessionCube();
+});
+// Google OAuth login callback
+window.handleGoogleLogin = function (response) {
+    const idToken = response.credential;
+    // Decode JWT payload
+    const base64Url = idToken.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    const user = JSON.parse(jsonPayload);
+    console.log("User info:", user);
+    // Example: Show user's name in the account cube
+    const accountCube = document.querySelector('#account-page .cube-content');
+    if (accountCube) {
+        accountCube.innerHTML = `<strong>Signed in as:</strong><br>${user.name || user.email}`;
+    }
+};
+function handleGoogleOAuthCallback() {
+    // Parse the hash fragment for tokens
+    const hash = window.location.hash.substring(1);
+    const params = new URLSearchParams(hash);
+    const idToken = params.get('id_token');
+    if (idToken) {
+        // Decode JWT payload
+        const base64Url = idToken.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        const user = JSON.parse(jsonPayload);
+        console.log("User info:", user);
+        // Show user's name in the account cube
+        const accountCube = document.querySelector('#account-page .cube-content');
+        if (accountCube) {
+            accountCube.innerHTML = `<strong>Signed in as:</strong><br>${user.name || user.email}`;
+        }
+    }
+    else {
+        // Handle error or show a message
+        alert('Google sign-in failed or was cancelled.');
+    }
+}
+const GOOGLE_CLIENT_ID = '60469736730-85h8nbi3g8iqe5htnesq9msiobkn7382.apps.googleusercontent.com';
+const GOOGLE_REDIRECT_URI = 'http://localhost:5500/callback';
+const GOOGLE_SCOPE = 'openid email profile';
+function getGoogleOAuthURL() {
+    const params = new URLSearchParams({
+        client_id: GOOGLE_CLIENT_ID,
+        redirect_uri: GOOGLE_REDIRECT_URI,
+        response_type: 'token id_token',
+        scope: GOOGLE_SCOPE,
+        include_granted_scopes: 'true',
+        state: 'tempo-login',
+        nonce: Math.random().toString(36).substring(2),
+        prompt: 'select_account'
+    });
+    return `https://accounts.google.com/o/oauth2/v2/auth?${params.toString()}`;
+}
+(_a = document.getElementById('google-signin-btn')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', () => {
+    window.location.href = getGoogleOAuthURL();
 });
